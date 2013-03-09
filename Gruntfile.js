@@ -43,7 +43,7 @@ module.exports = function(grunt) {
     coffee: {
       compile: {
         files: {
-          'public/app/js/main.min.js': ['app/**/*.coffee']
+          'public/js/main.min.js': ['app/**/*.coffee']
         }
       }
     },
@@ -63,7 +63,7 @@ module.exports = function(grunt) {
     uglify: {
       dist: {
         files: { 
-          'public/app/js/main.min.js': ['public/app/js/main.min.js'],
+          'public/js/main.min.js': ['public/js/main.min.js'],
           'public/js/vendor-scripts.min.js': 'public/js/vendor-scripts.min.js'
         }
       }
@@ -101,10 +101,10 @@ module.exports = function(grunt) {
           optimizationLevel: 1
         },
         files: {
-          'public/images/**/*.*': ['app/images/**/*.*', 'vendor/images/**/*.*']
+          'public/images/': ['app/images/**/*.*', 'vendor/images/**/*.*']
         }
       }
-    },
+    }
 
   });
 
