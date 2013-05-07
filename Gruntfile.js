@@ -19,8 +19,14 @@ module.exports = function(grunt) {
           {
             expand: true,
             cwd: 'app/',
-            src: ['index.html'],
+            src: ['index.html', 'assets/fonts/**'],
             dest: 'public/'
+          },
+          {
+            expand: true,
+            cwd: 'vendor/js-no-compile',
+            src: ['**/*.*'],
+            dest: 'public/js/'
           }
         ]
       },
@@ -29,14 +35,20 @@ module.exports = function(grunt) {
           {
             expand: true,
             cwd: 'app/',
-            src: ['index.html', 'images/**/*.*'],
+            src: ['index.html', 'assets/images/**', 'assets/fonts/**'],
             dest: 'public/'
           },
           {
             expand: true,
             cwd: 'vendor/',
             src: ['images/**/*.*'],
-            dest: 'public/'
+            dest: 'public/assets/'
+          },
+          {
+            expand: true,
+            cwd: 'vendor/js-no-compile',
+            src: ['**/*.*'],
+            dest: 'public/js/'
           }
         ]
       }
@@ -53,7 +65,7 @@ module.exports = function(grunt) {
     less: {
       dist: {
         files: {
-          "public/css/style.min.css": "app/less/**.less"
+          "public/assets/css/style.min.css": "public/assets/css/style.min.css"
         }
       }
     },
@@ -74,36 +86,32 @@ module.exports = function(grunt) {
     concat: {
       dist: {
         files: {
-          'public/js/vendor-scripts.min.js': 'vendor/js/**/*.js',
-          'public/css/vendor-css.min.css': 'vendor/css/**/*.css'
+          'public/js/vendor-scripts.min.js': [
+            'vendor/js/jquery-1.9.1.js',
+            'vendor/js/lodash.js',
+            'vendor/js/bootstrap.js',
+            'vendor/js/angular.js',
+            'vendor/js/angular-resource.js'
+          ],
+          'public/assets/css/vendor-css.min.css': 'vendor/css/**/*.css',
+          'public/assets/css/style.min.css': 'app/assets/less/**.less'
         }
       }
     },
 
     ngtemplates:  {
-      dist:      {
+      Weblight: {
         options:  { base: 'app/views' },
         src:      [ 'app/views/**.html' ],
-        dest:     'public/templates.js'
-        }
+        dest:     'public/js/templates.js'
+        }  
     },
 
     cssmin: {
       compress: {
         files: {
-          "public/css/vendor-css.min.css": ["public/css/vendor-css.min.css"],
-          "public/css/style.min.css": ["public/css/style.min.css"]
-        }
-      }
-    },
-
-    imagemin: {
-      dist: {
-        options: {
-          optimizationLevel: 1
-        },
-        files: {
-          'public/images/': ['app/images/**/*.*', 'vendor/images/**/*.*']
+          "public/assets/css/vendor-css.min.css": ["public/assets/css/vendor-css.min.css"],
+          "public/assets/css/style.min.css": ["public/assets/css/style.min.css"]
         }
       }
     },
@@ -128,12 +136,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-angular-templates'); 
   grunt.loadNpmTasks('grunt-contrib-concat'); 
   grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-regarde');
   grunt.loadNpmTasks('grunt-contrib-connect');
 
   // Define your tasks here
-  grunt.registerTask('default', ['copy:dist', 'concat', 'coffee', 'jshint', 'uglify', 'less', 'cssmin', 'ngtemplates', 'imagemin']);
+  grunt.registerTask('default', ['copy:dist', 'concat', 'coffee', 'jshint', 'uglify', 'less', 'cssmin', 'ngtemplates']);
   grunt.registerTask('rebuild-dev', ['copy:dev', 'concat', 'coffee', 'jshint', 'less', 'ngtemplates']);
   grunt.registerTask('server', ['rebuild-dev', 'connect', 'regarde']);
 };
